@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import *
 import random
+from PIL import Image, ImageTk
 
 a = -1
 b = -1
@@ -11,6 +12,7 @@ wrong = 0
 status = "HAI..."
 maxim = 100
 no_questions = 30
+photo_path = "photo/"
 
 def init():
     global right
@@ -32,6 +34,13 @@ def init():
     btn_small.config(state=NORMAL)
     new_game()
 
+def h_new_game(event):
+    init()
+
+def h_exit(event):
+    exit_game()
+
+
 def new_game():
     global a
     global b
@@ -42,14 +51,12 @@ def new_game():
     global no_questions
     if right == no_questions:
         status = "BRAVO MATEI !!!"
-        # label_top_a3.place(relx=0.5, rely=0.5)
         label_top_a3.config(text=status)
         btn_big.config(state=DISABLED)
         btn_eq.config(state=DISABLED)
         btn_small.config(state=DISABLED)
     elif wrong == no_questions:
         status = "GAME OVER!!!"
-        # label_top_a3.place(relx=0.5, rely=0.5)
         label_top_a3.config(text=status)
         btn_big.config(state=DISABLED)
         btn_eq.config(state=DISABLED)
@@ -130,21 +137,13 @@ frame_top_b3 = tk.Frame(frame_top, bg="grey", height=100, width=100)
 frame_top_b3.grid(row=2, column=4)
 
 label_top_a1 = tk.Label(frame_top_a1, text="A")
-# label_top_a1.place(relx=0.5, rely=0.5)
 label_top_b1 = tk.Label(frame_top_b1, text="?")
-# label_top_b1.place(relx=0.5, rely=0.5)
 label_top_c1 = tk.Label(frame_top_c1, text="B")
-# label_top_c1.place(relx=0.5, rely=0.5)
 btn_big = tk.Button(frame_top_a2, text=">", command=is_big)
-# btn_big.place(relx=0.5, rely=0.5)
 btn_eq = tk.Button(frame_top_b2, text="=", command=is_eq)
-# btn_eq.place(relx=0.5, rely=0.5)
 btn_small = tk.Button(frame_top_c2, text="<", command=is_small)
-# btn_small.place(relx=0.5, rely=0.5)
 label_top_a3 = tk.Label(frame_top_a3, text="...STATUS...")
-# label_top_a3.place(relx=0.5, rely=0.5)
 label_top_b3 = tk.Label(frame_top_b3, text="...")
-# label_top_b3.place(relx=0.5, rely=0.5)
 
 frame_bottom_a1 = tk.Frame(frame_bottom, bg="green", height=100, width=150)
 frame_bottom_a1.grid(row=0, column=0)
@@ -152,9 +151,20 @@ frame_bottom_a1.grid_propagate(0)
 frame_bottom_b1 = tk.Frame(frame_bottom, bg="blue", height=100, width=150)
 frame_bottom_b1.grid(row=0, column=1)
 
-btn_new_game = tk.Button(frame_bottom_a1, text="New Game", command=init)
-btn_new_game.place(relx=0.5, rely=0.5)
-btn_exit = tk.Button(frame_bottom_b1, text="Exit", width=8, command=exit_game)
-btn_exit.place(relx=0.5, rely=0.5)
+# btn_new_game = tk.Button(frame_bottom_a1, text="New Game", command=init)
+# btn_new_game.place(relx=0, rely=0)
+btn_exit = tk.Button(frame_bottom_b1, text="Exit", command=exit_game)
+btn_exit.place(relx=0, rely=0)
+
+img_new_game = ImageTk.PhotoImage(Image.open(photo_path + "new_game.jpg"))
+label_new_game = tk.Label(frame_bottom_a1, image=img_new_game)
+label_new_game.place(relx=0, rely=0, relwidth=1, relheight=1)
+label_new_game.bind("<Button-1>", h_new_game)
+
+img_exit = ImageTk.PhotoImage(Image.open(photo_path + "exit.jpg"))
+label_exit = tk.Label(frame_bottom_b1, image=img_exit)
+label_exit.place(relx=0, rely=0, relwidth=1, relheight=1)
+label_exit.bind("<Button-1>", h_exit)
+
 
 root.mainloop()
