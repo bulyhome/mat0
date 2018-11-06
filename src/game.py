@@ -9,7 +9,6 @@ a = -1
 b = -1
 right = 0
 wrong = 0
-status = "HAI..."
 maxim_good = 10
 maxim_bad = 1
 maxim = 100
