@@ -15,14 +15,17 @@ maxim_bad = 1
 maxim = 100
 photo_path = "photo/"
 to_do = 0
+sec= 0
 
 def init():
     global right
     global wrong
     global to_do
+    global sec
     right = 0
     wrong = 0
-    to_do = 1    
+    to_do = 1
+    sec = 0
     new_game()
 
 def h_new_game(event):
@@ -105,6 +108,14 @@ def is_small():
         wrong += 1
     new_game()
 
+def update_timer():
+    global sec
+    global to_do
+    if to_do:
+        sec += 1
+        label_timer.config(text=str(sec))
+    root.after(1000, update_timer)
+
 
 root = tk.Tk()
 root.title("...MAT_0...")
@@ -139,6 +150,9 @@ label_right_c3 = tk.Label(root, text=str(right) + " / " + str(maxim_good),
     foreground="white", background="black", font=("Helvetica", 32))
 label_right_c3.place(x=300, y=400, width=200, height=100)
 
+label_timer = tk.Label(root, text=str(sec), foreground="white", background="black", font=("Helvetica", 32))
+label_timer.place(x=300, y=300, width=200, height=100)
+
 img_status = ImageTk.PhotoImage(Image.open(photo_path + "hai_matei.jpg"))
 label_status = tk.Label(root, image=img_status)
 label_status.place(x=0, y=200, width=300, height=100)
@@ -153,4 +167,5 @@ label_exit = tk.Label(root, image=img_exit)
 label_exit.place(x=150, y=300, width=150, height=100)
 label_exit.bind("<Button-1>", h_exit)
 
+update_timer()
 root.mainloop()
