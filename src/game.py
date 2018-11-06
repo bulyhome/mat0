@@ -10,28 +10,19 @@ b = -1
 right = 0
 wrong = 0
 status = "HAI..."
+maxim_good = 10
+maxim_bad = 1
 maxim = 100
-no_questions = 30
 photo_path = "photo/"
+to_do = 0
 
 def init():
     global right
     global wrong
+    global to_do
     right = 0
     wrong = 0
-    status = "HAI..."
-    label_top_a1.place(relx=0.5, rely=0.5)
-    label_top_b1.place(relx=0.5, rely=0.5)
-    label_top_c1.place(relx=0.5, rely=0.5)
-    btn_big.place(relx=0.5, rely=0.5)
-    btn_eq.place(relx=0.5, rely=0.5)
-    btn_small.place(relx=0.5, rely=0.5)
-    label_top_b3.place(relx=0.5, rely=0.5)
-    label_top_a3.config(text=status)
-    label_top_a3.place(relx=0.5, rely=0.5)
-    btn_big.config(state=NORMAL)
-    btn_eq.config(state=NORMAL)
-    btn_small.config(state=NORMAL)
+    to_do = 1    
     new_game()
 
 def h_new_game(event):
@@ -40,6 +31,14 @@ def h_new_game(event):
 def h_exit(event):
     exit_game()
 
+def h_is_small(event):
+    if to_do: is_small()
+
+def h_is_eq(event):
+    if to_do: is_eq()
+
+def h_is_big(event):
+    if to_do: is_big()
 
 def new_game():
     global a
@@ -47,26 +46,28 @@ def new_game():
     global right
     global wrong
     global status
-    global maxim
-    global no_questions
-    if right == no_questions:
-        status = "BRAVO MATEI !!!"
-        label_top_a3.config(text=status)
-        btn_big.config(state=DISABLED)
-        btn_eq.config(state=DISABLED)
-        btn_small.config(state=DISABLED)
-    elif wrong == no_questions:
-        status = "GAME OVER!!!"
-        label_top_a3.config(text=status)
-        btn_big.config(state=DISABLED)
-        btn_eq.config(state=DISABLED)
-        btn_small.config(state=DISABLED)
+    global maxim_good
+    global maxim_bad
+    global to_do
+    if right == maxim_good:
+        img_status = ImageTk.PhotoImage(Image.open(photo_path + "bravo_matei.jpg"))
+        label_status.config(image=img_status)
+        label_status.image = img_status
+        to_do = 0        
+    elif wrong == maxim_bad:
+        img_status = ImageTk.PhotoImage(Image.open(photo_path + "game_over.jpg"))
+        label_status.config(image=img_status)
+        label_status.image = img_status
+        to_do = 0        
     else: 
         a = random.randint(0, maxim)
         b = random.randint(0, maxim)
         label_top_a1.config(text=str(a))
         label_top_c1.config(text=str(b))
-    label_top_b3.config(text=str(right) + " / " + str(wrong))
+        img_status = ImageTk.PhotoImage(Image.open(photo_path + "hai_matei.jpg"))
+        label_status.config(image=img_status)
+        label_status.image = img_status
+    label_right_c3.config(text=str(right) + " / " + str(maxim_good))
 
 def exit_game():
 	root.destroy()
@@ -81,7 +82,6 @@ def is_big():
     else:
         wrong += 1
     new_game()
-
 
 def is_eq():
     global a
@@ -107,64 +107,50 @@ def is_small():
 
 
 root = tk.Tk()
-root.title("HAI MATEI...")
+root.title("...MAT_0...")
 root.geometry("500x500")
 root.resizable(0, 0)
 
-frame_top = tk.Frame(root, bg="yellow", height=300, width=500)
-frame_top.grid(row=0, column=0)
-frame_top.grid_propagate(0)
-frame_bottom = tk.Frame(root, bg="red", height=200, width=500)
-frame_bottom.grid(row=1, column=0)
-frame_bottom.grid_propagate(0)
+img_bg = ImageTk.PhotoImage(Image.open(photo_path + "fundal.jpg"))
+label_bg = tk.Label(root, image=img_bg)
+label_bg.place(relx=0, rely=0, relwidth=1, relheight=1)
 
-frame_top_a1 = tk.Frame(frame_top, bg="green", height=100, width=100)
-frame_top_a1.grid(row=0, column=0)
-frame_top_a1.grid_propagate(0)
-frame_top_b1 = tk.Frame(frame_top, bg="blue", height=100, width=100)
-frame_top_b1.grid(row=0, column=1)
-frame_top_c1 = tk.Frame(frame_top, bg="grey", height=100, width=100)
-frame_top_c1.grid(row=0, column=2)
-frame_top_a2 = tk.Frame(frame_top, bg="grey", height=100, width=100)
-frame_top_a2.grid(row=1, column=0)
-frame_top_b2 = tk.Frame(frame_top, bg="black", height=100, width=100)
-frame_top_b2.grid(row=1, column=1)
-frame_top_c2 = tk.Frame(frame_top, bg="brown", height=100, width=100)
-frame_top_c2.grid(row=1, column=2)
-frame_top_a3 = tk.Frame(frame_top, bg="red", height=100, width=300)
-frame_top_a3.grid(row=2, column=0, columnspan=3)
-frame_top_b3 = tk.Frame(frame_top, bg="grey", height=100, width=100)
-frame_top_b3.grid(row=2, column=4)
+label_top_a1 = tk.Label(root, text="A", foreground="white", background="black", font=("Helvetica", 32))
+label_top_a1.place(x=0, y=0, width=100, height=100)
+label_top_c1 = tk.Label(root, text="B", foreground="white", background="black", font=("Helvetica", 32))
+label_top_c1.place(x=200, y=0, width=100, height=100)
 
-label_top_a1 = tk.Label(frame_top_a1, text="A")
-label_top_b1 = tk.Label(frame_top_b1, text="?")
-label_top_c1 = tk.Label(frame_top_c1, text="B")
-btn_big = tk.Button(frame_top_a2, text=">", command=is_big)
-btn_eq = tk.Button(frame_top_b2, text="=", command=is_eq)
-btn_small = tk.Button(frame_top_c2, text="<", command=is_small)
-label_top_a3 = tk.Label(frame_top_a3, text="...STATUS...")
-label_top_b3 = tk.Label(frame_top_b3, text="...")
+img_small = ImageTk.PhotoImage(Image.open(photo_path + "mai_mic.jpg"))
+label_small = tk.Label(root, image=img_small)
+label_small.place(x=0, y=100, width=100, height=100)
+label_small.bind("<Button-1>", h_is_small)
 
-frame_bottom_a1 = tk.Frame(frame_bottom, bg="green", height=100, width=150)
-frame_bottom_a1.grid(row=0, column=0)
-frame_bottom_a1.grid_propagate(0)
-frame_bottom_b1 = tk.Frame(frame_bottom, bg="blue", height=100, width=150)
-frame_bottom_b1.grid(row=0, column=1)
+img_eq = ImageTk.PhotoImage(Image.open(photo_path + "egal.jpg"))
+label_eq = tk.Label(root, image=img_eq)
+label_eq.place(x=100, y=100, width=100, height=100)
+label_eq.bind("<Button-1>", h_is_eq)
 
-# btn_new_game = tk.Button(frame_bottom_a1, text="New Game", command=init)
-# btn_new_game.place(relx=0, rely=0)
-btn_exit = tk.Button(frame_bottom_b1, text="Exit", command=exit_game)
-btn_exit.place(relx=0, rely=0)
+img_big = ImageTk.PhotoImage(Image.open(photo_path + "mai_mare.jpg"))
+label_big = tk.Label(root, image=img_big)
+label_big.place(x=200, y=100, width=100, height=100)
+label_big.bind("<Button-1>", h_is_big)
+
+label_right_c3 = tk.Label(root, text=str(right) + " / " + str(maxim_good), 
+    foreground="white", background="black", font=("Helvetica", 32))
+label_right_c3.place(x=300, y=400, width=200, height=100)
+
+img_status = ImageTk.PhotoImage(Image.open(photo_path + "hai_matei.jpg"))
+label_status = tk.Label(root, image=img_status)
+label_status.place(x=0, y=200, width=300, height=100)
 
 img_new_game = ImageTk.PhotoImage(Image.open(photo_path + "new_game.jpg"))
-label_new_game = tk.Label(frame_bottom_a1, image=img_new_game)
-label_new_game.place(relx=0, rely=0, relwidth=1, relheight=1)
+label_new_game = tk.Label(root, image=img_new_game)
+label_new_game.place(x=0, y=300, width=150, height=100)
 label_new_game.bind("<Button-1>", h_new_game)
 
 img_exit = ImageTk.PhotoImage(Image.open(photo_path + "exit.jpg"))
-label_exit = tk.Label(frame_bottom_b1, image=img_exit)
-label_exit.place(relx=0, rely=0, relwidth=1, relheight=1)
+label_exit = tk.Label(root, image=img_exit)
+label_exit.place(x=150, y=300, width=150, height=100)
 label_exit.bind("<Button-1>", h_exit)
-
 
 root.mainloop()
